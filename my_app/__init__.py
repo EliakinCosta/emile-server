@@ -12,3 +12,6 @@ login_manager.login_view = 'auth.login'
 
 from my_app.auth.views import auth
 app.register_blueprint(auth)
+
+if __name__=='__main__':
+  app.run()
