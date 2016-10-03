@@ -1,1 +1,1 @@
-web: gunicorn emile_test --log-file -
+web: gunicorn emile_test:emile_server --log-file -
