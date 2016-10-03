@@ -1,4 +1,4 @@
-from auth.app import app
+from auth.app import emile_server
 
 if __name__=='__main__':
-  app.run()
+  emile_server.run()
