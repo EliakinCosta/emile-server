@@ -1,1 +1,1 @@
-web: gunicorn auth:app:app --log-file -
+web: gunicorn auth:app:emile_server --log-file -
