@@ -1,6 +1,6 @@
 from flask_login import UserMixin
 from ldap3 import Server, Connection, ALL
-import my_app
+from auth.app import app
 
 class User(UserMixin):
 
@@ -14,7 +14,7 @@ class User(UserMixin):
     @staticmethod
     def try_login(username, password):
         try:
-            server = Server(my_app.app.config['LDAP_PROVIDER_URL'], get_info=ALL)
+            server = Server(app.config['LDAP_PROVIDER_URL'], get_info=ALL)
             Connection(server, 'uid={0}, cn=users, cn=accounts, dc=demo1, dc=freeipa, dc=org'.format(username),
                        password, auto_bind=True)
             return True

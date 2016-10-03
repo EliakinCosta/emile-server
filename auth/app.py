@@ -10,5 +10,5 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'auth.login'
 
-from my_app.auth.views import auth
-app.register_blueprint(auth)
+from . import views
+app.register_blueprint(views.auth)
