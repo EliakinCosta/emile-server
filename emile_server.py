@@ -1,4 +1,31 @@
-from auth.app import emile_server
+from flask import Flask
+import settings
+import backend
+from pathlib import Path
+from cruds.crud_aluno import services as aluno_services
+from cruds.crud_disciplina import services as disciplina_services
+from cruds.crud_turma import services as turma_services
 
-if __name__=='__main__':
-  emile_server.run()
+
+def create_app(backend_path=''):
+    app = Flask("emile")
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@localhost/wordcount_dev'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    backend.db.init_app(app)
+    my_file = Path(settings.DB_PATH)
+
+    if not my_file.is_file():
+        with app.app_context():
+            backend.db.create_all()
+    return app
+
+
+app = create_app(settings.BACKEND_PATH)
+
+
+if __name__ == '__main__':
+    app.register_blueprint(aluno_services.user)
+    app.register_blueprint(disciplina_services.disciplina)
+    app.register_blueprint(turma_services.turma)
+    app.run(debug=True)
