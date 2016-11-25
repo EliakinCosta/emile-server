@@ -2,6 +2,7 @@ from flask import Flask
 import settings
 import backend
 from pathlib import Path
+import os
 from cruds.crud_aluno import services as aluno_services
 from cruds.crud_disciplina import services as disciplina_services
 from cruds.crud_turma import services as turma_services
@@ -9,15 +10,10 @@ from cruds.crud_turma import services as turma_services
 
 def create_app(backend_path=''):
     app = Flask("emile")
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@localhost/wordcount_dev'
+    app.config.from_object(os.environ['APP_SETTINGS'])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     backend.db.init_app(app)
-    my_file = Path(settings.DB_PATH)
-
-    if not my_file.is_file():
-        with app.app_context():
-            backend.db.create_all()
     return app
 
 
