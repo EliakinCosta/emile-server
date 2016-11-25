@@ -10,7 +10,6 @@ from cruds.crud_turma import services as turma_services
 
 def create_app(backend_path=''):
     app = Flask("emile")
-    app.config.from_object(os.environ['APP_SETTINGS'])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     backend.db.init_app(app)
