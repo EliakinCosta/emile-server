@@ -18,10 +18,9 @@ def create_app(backend_path=''):
 
 
 app = create_app(settings.BACKEND_PATH)
-
+app.register_blueprint(aluno_services.user)
+app.register_blueprint(disciplina_services.disciplina)
+app.register_blueprint(turma_services.turma)
 
 if __name__ == '__main__':
-    app.register_blueprint(aluno_services.user)
-    app.register_blueprint(disciplina_services.disciplina)
-    app.register_blueprint(turma_services.turma)
     app.run()
