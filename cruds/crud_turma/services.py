@@ -49,7 +49,9 @@ def add_aula_turma(turma_id, horario_id):
     aula = models.Aula(data_aula=datetime.datetime.now().date())
 
     aula.child = Horario.query.get(horario_id)
-    turma.children.append(aula)
+
+    with db.session.no_autoflush:
+        turma.children.append(aula)
 
     db.session.commit()
 
