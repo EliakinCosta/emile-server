@@ -37,7 +37,7 @@ class Aula(db.Model):
 
     @horario_inicio_aula.expression
     def horario_inicio_aula(cls):
-        return db.func.datetime(cls.data_aula, Horario.hora_inicio)
+        return db.func.timestamp(cls.data_aula, Horario.hora_inicio)
 
     @hybrid_property
     def horario_fim_aula(self):
@@ -45,7 +45,7 @@ class Aula(db.Model):
 
     @horario_fim_aula.expression
     def horario_fim_aula(cls):
-        return db.func.datetime(cls.data_aula, Horario.hora_fim)
+        return db.func.timestamp(cls.data_aula, Horario.hora_fim)
 
 
 class Turma(db.Model):
