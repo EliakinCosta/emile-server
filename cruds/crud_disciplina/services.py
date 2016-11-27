@@ -6,7 +6,7 @@ from backend import db
 disciplina = Blueprint("disciplina", __name__)
 
 @disciplina.route('/disciplinas', methods=['GET'])
-def get_users():
+def get_disciplinas():
     return jsonify(disciplinas=[dict(id=disciplina.id, codigo=disciplina.codigo) for disciplina in models.Disciplina.query.all()])
 
 
