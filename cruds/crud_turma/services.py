@@ -46,8 +46,8 @@ def add_aula_turma(turma_id):
 
     turma = models.Turma.query.get(turma_id)
 
-    t1 = datetime.datetime.strptime('27/11/2016-16:00:00', '%d/%m/%Y-%H:%M:%S')
-    t2 = datetime.datetime.strptime('27/11/2016-23:00:00', '%d/%m/%Y-%H:%M:%S')
+    t1 = datetime.datetime.strptime('28/11/2016-00:00:00', '%d/%m/%Y-%H:%M:%S')
+    t2 = datetime.datetime.strptime('28/11/2016-23:00:00', '%d/%m/%Y-%H:%M:%S')
 
     aula = models.Aula(data_inicio_aula=t1, data_fim_aula=t2)
 
