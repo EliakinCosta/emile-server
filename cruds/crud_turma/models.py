@@ -12,22 +12,6 @@ aluno_turma= db.Table('aluno_turma',
                              db.PrimaryKeyConstraint('turma_id', 'user_id'))
 
 
-class Aula(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'), nullable=False)
-    data_inicio_aula = db.Column(db.DateTime())
-    data_fim_aula = db.Column(db.DateTime())
-
-
-    def serialize(self):
-        return {
-            'id': self.id,
-            'data_inicio_aula': datetime.date.strftime(self.data_inicio_aula, "%m-%d-%Y %H:%M:%S"),
-            'data_fim_aula': datetime.date.strftime(self.data_fim_aula, "%m-%d-%Y %H:%M:%S"),
-            'turma': self.turma_aula.serialize(),
-        }
-
-
 class Turma(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     codigo = db.Column(db.String(20), unique=True)

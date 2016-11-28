@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from . import models
 from backend import db
 from cruds.crud_aluno.models import User
+from cruds.crud_aula.models import Aula
 import datetime
 from sqlalchemy import and_, cast, DateTime
 
@@ -42,14 +43,13 @@ def turma_details(turma_id):
 
 @turma.route('/add_aula_turma/<turma_id>', methods=['POST'])
 def add_aula_turma(turma_id):
-    print(models.Aula.query.all())
 
     turma = models.Turma.query.get(turma_id)
 
     t1 = datetime.datetime.strptime('28/11/2016-00:00:00', '%d/%m/%Y-%H:%M:%S')
     t2 = datetime.datetime.strptime('28/11/2016-23:00:00', '%d/%m/%Y-%H:%M:%S')
 
-    aula = models.Aula(data_inicio_aula=t1, data_fim_aula=t2)
+    aula = Aula(data_inicio_aula=t1, data_fim_aula=t2)
 
     with db.session.no_autoflush:
         turma.aulas.append(aula)
@@ -57,16 +57,6 @@ def add_aula_turma(turma_id):
     db.session.commit()
 
     return jsonify(turma=models.Turma.query.get(turma_id).serialize())
-
-
-@turma.route('/disciplina_em_andamento/<professor_id>', methods=['GET'])
-def disciplina_em_andamento(professor_id):
-    aulas = (db.session.query(models.Aula).filter(User.id == models.Turma.professor_id).
-                                       filter(models.Turma.id== models.Aula.turma_id).
-                                       filter(User.id == professor_id).
-                                       filter(and_(datetime.datetime.now() >= models.Aula.data_inicio_aula,
-                                                   datetime.datetime.now() <= models.Aula.data_fim_aula)).all())
-    return jsonify(aula=[aula.serialize() for aula in aulas])
 
 
 @turma.route('/alunos_turma/<turma_id>', methods=['GET'])
