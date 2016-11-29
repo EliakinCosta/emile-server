@@ -4,7 +4,7 @@ from backend import db
 from cruds.crud_aluno.models import User
 from cruds.crud_aula.models import Aula
 import datetime
-from sqlalchemy import and_, cast, DateTime
+from sqlalchemy import and_, or_
 
 
 turma = Blueprint("turma", __name__)
@@ -43,21 +43,25 @@ def turma_details(turma_id):
 
 @turma.route('/add_aula_turma/<turma_id>', methods=['POST'])
 def add_aula_turma(turma_id):
-
     turma = models.Turma.query.get(turma_id)
 
-    t1 = datetime.datetime.strptime('28/11/2016-00:00:00', '%d/%m/%Y-%H:%M:%S')
-    t2 = datetime.datetime.strptime('28/11/2016-23:00:00', '%d/%m/%Y-%H:%M:%S')
+    inicio_aula = datetime.datetime.strptime(request.form.get('data_inicio_aula'), '%d/%m/%Y-%H:%M:%S')
+    fim_aula = datetime.datetime.strptime(request.form.get('data_fim_aula'), '%d/%m/%Y-%H:%M:%S')
 
-    aula = Aula(data_inicio_aula=t1, data_fim_aula=t2)
+    if not (db.session.query(Aula).filter(models.Turma.id== Aula.turma_id).
+                                       filter(or_(and_(inicio_aula > Aula.data_inicio_aula,
+                                                       inicio_aula < Aula.data_fim_aula),
+                                                  and_(fim_aula > Aula.data_inicio_aula,
+                                                       fim_aula < Aula.data_fim_aula))).all()):
 
-    with db.session.no_autoflush:
+        aula = Aula(data_inicio_aula=inicio_aula, data_fim_aula=fim_aula)
         turma.aulas.append(aula)
 
-    db.session.commit()
+        db.session.commit()
 
-    return jsonify(turma=models.Turma.query.get(turma_id).serialize())
+        return jsonify(turma=turma.serialize())
 
+    return jsonify(result='invalid period')
 
 @turma.route('/alunos_turma/<turma_id>', methods=['GET'])
 def alunos_turma(turma_id):

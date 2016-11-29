@@ -1,10 +1,10 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 from . import models
 from backend import db
 from cruds.crud_aluno.models import User
 from cruds.crud_turma.models import Turma
 import datetime
-from sqlalchemy import and_, cast, DateTime
+from sqlalchemy import and_
 
 aula = Blueprint("aula", __name__)
 

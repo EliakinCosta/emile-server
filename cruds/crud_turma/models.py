@@ -1,8 +1,6 @@
 from backend import db
 from cruds.crud_disciplina.models import Disciplina
 from cruds.crud_aluno.models import User
-import datetime
-from sqlalchemy.orm import column_property
 
 
 
