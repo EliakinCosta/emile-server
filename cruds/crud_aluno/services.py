@@ -18,14 +18,14 @@ def get_users():
           200:
             description: This is the view to get all users. Aluno and Professo will be returned.
             schema:
-              id: id
               properties:
-                username:
-                  type: string
-                  description: The User name
-                id:
-                  type: int
-                  description: The User id
+                users:
+                  type: array
+                  description: User's list
+                  items:
+                    type: string
+                    default: {"id": integer, "username": string}
+
     """
     return jsonify(users=[dict(id=user.id, username=user.username) for user in models.User.query.all()])
 
