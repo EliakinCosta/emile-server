@@ -6,6 +6,7 @@ from cruds.crud_aluno import services as aluno_services
 from cruds.crud_disciplina import services as disciplina_services
 from cruds.crud_turma import services as turma_services
 from cruds.crud_aula import services as aula_services
+from flasgger import Swagger
 
 
 def create_app(backend_path=''):
@@ -18,6 +19,7 @@ def create_app(backend_path=''):
 
 
 app = create_app(settings.BACKEND_PATH)
+Swagger(app)
 app.register_blueprint(aluno_services.user)
 app.register_blueprint(disciplina_services.disciplina)
 app.register_blueprint(turma_services.turma)

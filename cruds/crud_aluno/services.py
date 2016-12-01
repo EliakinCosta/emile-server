@@ -9,6 +9,24 @@ user = Blueprint("user", __name__)
 
 @user.route('/users', methods=['GET'])
 def get_users():
+    """
+        Get all Users.
+        ---
+        tags:
+          - /users
+        responses:
+          200:
+            description: This is the view to get all users. Aluno and Professo will be returned.
+            schema:
+              id: id
+              properties:
+                username:
+                  type: string
+                  description: The User name
+                id:
+                  type: int
+                  description: The User id
+    """
     return jsonify(users=[dict(id=user.id, username=user.username) for user in models.User.query.all()])
 
 
