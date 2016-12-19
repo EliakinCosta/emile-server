@@ -1,29 +1,30 @@
 from flask import Flask
-import settings
 import backend
 import os
-from cruds.crud_aluno import services as aluno_services
-from cruds.crud_disciplina import services as disciplina_services
-from cruds.crud_turma import services as turma_services
-from cruds.crud_aula import services as aula_services
+import importlib
 from flasgger import Swagger
 
 
-def create_app(backend_path=''):
+def create_app():
     app = Flask("emile")
+
     app.config.from_object(os.environ['APP_SETTINGS'])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    print(os.environ['APP_SETTINGS'])
+
     backend.db.init_app(app)
     return app
 
 
-app = create_app(settings.BACKEND_PATH)
+def register_blueprints(app):
+    for crud in os.listdir(os.getcwd() + '/cruds/'):
+        if 'crud' in crud:
+            blueprint = getattr(importlib.import_module('cruds.{0}.services'.format(crud)), crud.replace('crud_', ''))
+            app.register_blueprint(blueprint)
+
+
+app = create_app()
 Swagger(app)
-app.register_blueprint(aluno_services.user)
-app.register_blueprint(disciplina_services.disciplina)
-app.register_blueprint(turma_services.turma)
-app.register_blueprint(aula_services.aula)
+register_blueprints(app)
 
 
 if __name__ == '__main__':

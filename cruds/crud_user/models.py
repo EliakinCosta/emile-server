@@ -10,8 +10,8 @@ class User(db.Model):
     birth_date = db.Column(db.Date())
     gender = db.Column(db.String(1))
     address = db.Column(db.String(250))
-    tipo = db.Column(db.String(50))
-    _turmas = db.relationship('Turma', backref='professor', lazy='dynamic')
+    type = db.Column(db.String(50))
+    _classes = db.relationship('Classes', backref='teacher', lazy='dynamic')
 
     def serialize(self):
         return {
@@ -22,8 +22,7 @@ class User(db.Model):
             'birth_date': datetime.date.strftime(self.birth_date, "%m-%d-%Y"),
             'gender': self.gender,
             'address': self.address,
-            'tipo': self.tipo,
-            'turmas': [turma.serialize() for turma in self._turmas.all()]
+            'type': self.type,
         }
 
     def set_fields(self, fields):
@@ -34,4 +33,4 @@ class User(db.Model):
         self.gender = fields['gender']
         self.address = fields['address']
         self.birth_date = datetime.datetime.strptime(fields['birth_date'], "%m-%d-%Y").date()
-        self.tipo = fields['tipo']
+        self.type = fields['type']
