@@ -195,7 +195,6 @@ def update_user(user_id):
                        default: {"id": integer, "username": string, "email":string, "name":string,
                        "birth_date": string, "gender": string, "address": string, "type": string}
        """
-
     user = models.User.query.get(user_id)
 
     if user:
