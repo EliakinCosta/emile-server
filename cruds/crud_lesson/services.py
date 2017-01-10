@@ -41,8 +41,9 @@ def lesson_in_progress(teacher_id):
     lessons = (db.session.query(models.Lesson).filter(User.id == Classes.teacher_id).
                filter(Classes.id == models.Lesson.classes_id).
                filter(User.id == teacher_id).
-               filter(and_(datetime.datetime.now() >= models.Lesson.lesson_start_date,
-                           datetime.datetime.now() <= models.Lesson.lesson_finish_date)).all())
+               filter(and_(datetime.datetime.now().time() >= models.Lesson.lesson_start_time,
+                           datetime.datetime.now().time() <= models.Lesson.lesson_finish_time)).
+               filter(datetime.datetime.now().weekday()== models.Lesson.week_day).all())
     return jsonify(lesson=[lesson.serialize() for lesson in lessons])
 
 
