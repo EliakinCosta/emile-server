@@ -63,7 +63,7 @@ This session is for developers and people with permission in the heroku app for 
 After push your new feature(and tested please), you can make the remote migrations with:
 
 ```
-heroku run python manage.py db upgrade --app emile-server
+heroku run python manage.py db upgrade --app emile-postgres
 ```
 
 
