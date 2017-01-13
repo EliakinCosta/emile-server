@@ -10,7 +10,7 @@ users = Blueprint("user", __name__)
 def get_users():
     # Docs
     """
-           Get all Users.
+           Get all Users
            ---
            tags:
              - /users
@@ -35,7 +35,7 @@ def add_users():
 
     # Docs
     """
-           Add User.
+           Add User
            ---
            tags:
              - /users
@@ -133,7 +133,7 @@ def user_details(user_id):
 def update_user(user_id):
     # Docs
     """
-           Update User.
+           Update User
            ---
            tags:
              - /users
@@ -244,6 +244,7 @@ def course_sections_teacher(teacher_id):
     # Docs
     """
            Course Sections Teacher
+           This is the view to get course sections  from a teacher.
            ---
            tags:
              - /users
@@ -255,7 +256,7 @@ def course_sections_teacher(teacher_id):
                 type: integer
            responses:
              200:
-               description:  This is the view to get course section  from a teacher.
+               description:  This is the view to get course sections  from a teacher.
                schema:
                  properties:
                    classes_teacher:
