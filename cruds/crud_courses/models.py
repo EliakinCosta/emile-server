@@ -1,11 +1,11 @@
 from backend import db
 
 
-class Subject(db.Model):
+class Courses(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(20), unique=True)
     name = db.Column(db.String(50))
-    classes = db.relationship('Classes', backref='subject', lazy='dynamic')
+    course_sections = db.relationship('CourseSections', backref='course', lazy='dynamic')
 
     def serialize(self):
         return {

@@ -2,7 +2,7 @@ import datetime
 from backend import db
 
 
-class User(db.Model):
+class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True)
     email = db.Column(db.String(50), unique=True)
@@ -11,7 +11,7 @@ class User(db.Model):
     gender = db.Column(db.String(1))
     address = db.Column(db.String(250))
     type = db.Column(db.String(50))
-    _classes = db.relationship('Classes', backref='teacher', lazy='dynamic')
+    course_sections = db.relationship('CourseSections', backref='teacher', lazy='dynamic')
 
     def serialize(self):
         return {
