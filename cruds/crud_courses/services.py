@@ -83,12 +83,12 @@ def course_details(course_id):
            parameters:
               - name: course_id
                 in: path
-                description: id of Subject.
+                description: id of Course.
                 required: true
                 type: integer
            responses:
              200:
-               description:  This is the view to get details for a Subject.
+               description:  This is the view to get details for a Course.
                schema:
                  properties:
                    course:

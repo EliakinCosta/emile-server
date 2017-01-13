@@ -25,7 +25,7 @@ class CourseSections(db.Model):
             'id': self.id,
             'code': self.code,
             'name': self.name,
-            'subject_id': Courses.query.get(self.course_id).serialize(),
+            'course': Courses.query.get(self.course_id).serialize(),
             'teacher_id':  self.teacher_id
         }
 

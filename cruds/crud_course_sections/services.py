@@ -11,12 +11,68 @@ course_sections = Blueprint("course_sections", __name__)
 
 @course_sections.route('/course_sections', methods=['GET'])
 def get_course_section():
+    # Docs
+    """
+           Get all Course Sections
+           ---
+           tags:
+             - /course_sections
+           responses:
+             200:
+               description: This is the view to get all Course Sections.
+               schema:
+                 properties:
+                   course_sections:
+                     type: array
+                     description: Course Sections list
+                     items:
+                       type: string
+                       default: {"id": integer, "code": string}
+    """
     return jsonify(course_sections=[dict(id=course_section.id, code=course_section.code) for course_section in models.CourseSections.query.all()])
 
 
 @course_sections.route('/add_course_section', methods=['POST'])
 def add_course_section():
-    """ This method it was implemented considering that all fields are required in client """
+    # Docs
+    """
+           Add Course Section
+           ---
+           tags:
+             - /course_sections
+           parameters:
+              - name: code
+                in: formData
+                description: code of the course.
+                required: true
+                type: string
+              - name: name
+                in: formData
+                description: name of the course.
+                required: true
+                type: string
+              - name: course_id
+                in: formData
+                description: course foreign key.
+                required: true
+                type: integer
+              - name: teacher_id
+                in: formData
+                description: teacher foreign key.
+                required: true
+                type: integer
+           responses:
+             200:
+               description:  This is the view to add a course.
+               schema:
+                 properties:
+                   course:
+                     type: array
+                     description: Course Sections list
+                     items:
+                       type: string
+                       default: {"id": integer, "code": string, "name": string, "course": { "code": string, "id": integer, "name": string }, "teacher_id": integer}
+    """
 
     user = models.Users.query.get(request.form.get('teacher_id')).serialize()
     if user['type'] == 'teacher':
