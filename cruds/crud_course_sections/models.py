@@ -3,12 +3,6 @@ from cruds.crud_courses.models import Courses
 from cruds.crud_users.models import Users
 
 
-course_section_students = db.Table('course_section_students',
-                       db.Column('course_sections_id', db.Integer, db.ForeignKey('course_sections.id'), nullable=False),
-                       db.Column('users_id', db.Integer, db.ForeignKey('users.id'), nullable=False),
-                       db.PrimaryKeyConstraint('course_sections_id', 'users_id'))
-
-
 class CourseSections(db.Model):
     __tablename__ = 'course_sections'
 
@@ -16,7 +10,6 @@ class CourseSections(db.Model):
     code = db.Column(db.String(20), unique=True)
     name = db.Column(db.String(50))
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
-    students = db.relationship('Users', secondary=course_section_students, backref='course_section')
     teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     section_times = db.relationship("SectionTimes", backref='course_section', lazy='dynamic')
 

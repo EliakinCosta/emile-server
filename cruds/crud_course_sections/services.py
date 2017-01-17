@@ -3,6 +3,7 @@ from . import models
 from backend import db
 from cruds.crud_users.models import Users
 from cruds.crud_section_times.models import SectionTimes
+from cruds.crud_course_section_students.models import CourseSectionStudents
 import datetime
 from sqlalchemy import and_, or_
 
@@ -12,69 +13,11 @@ course_sections = Blueprint("course_sections", __name__)
 
 @course_sections.route('/course_sections', methods=['GET'])
 def get_course_section():
-    # Docs
-    """
-           Get all Course Sections
-           ---
-           tags:
-             - /course_sections
-           responses:
-             200:
-               description: This is the view to get all Course Sections.
-               schema:
-                 properties:
-                   course_sections:
-                     type: array
-                     description: Course Sections list
-                     items:
-                       type: string
-                       default: {"id": integer, "code": string}
-    """
     return jsonify(course_sections=[dict(id=course_section.id, code=course_section.code) for course_section in models.CourseSections.query.all()])
 
 
 @course_sections.route('/add_course_section', methods=['POST'])
 def add_course_section():
-    # Docs
-    """
-           Add Course Section
-           ---
-           tags:
-             - /course_sections
-           parameters:
-              - name: code
-                in: formData
-                description: code of the course.
-                required: true
-                type: string
-              - name: name
-                in: formData
-                description: name of the course.
-                required: true
-                type: string
-              - name: course_id
-                in: formData
-                description: course foreign key.
-                required: true
-                type: integer
-              - name: teacher_id
-                in: formData
-                description: teacher foreign key.
-                required: true
-                type: integer
-           responses:
-             200:
-               description:  This is the view to add a course.
-               schema:
-                 properties:
-                   course_sections:
-                     type: array
-                     description: Course Sections list
-                     items:
-                       type: string
-                       default: {"id": integer, "code": string, "name": string, "course": { "code": string, "id": integer, "name": string }, "teacher_id": integer}
-    """
-
     user = models.Users.query.get(request.form.get('teacher_id')).serialize()
     if user['type'] == 'teacher':
         course_section = models.CourseSections()
@@ -88,115 +31,25 @@ def add_course_section():
 
 
 @course_sections.route('/add_student_course_section/<course_section_id>/<user_id>', methods=['POST'])
-def add_student_classes(course_section_id, user_id):
-    # Docs
-    """
-           Add Student Course Section
-           ---
-           tags:
-             - /course_sections
-           parameters:
-              - name: course_section_id
-                in: path
-                description: course section id.
-                required: true
-                type: integer
-              - name: user_id
-                in: path
-                description: user id.
-                required: true
-                type: integer
-           responses:
-             200:
-               description:  This is the view to add a student in a course section.
-               schema:
-                 properties:
-                   course_section:
-                     type: array
-                     description: Course Sections list
-                     items:
-                       type: string
-                       default: {"id": integer, "code": string, "name": string, "course": { "code": string, "id": integer, "name": string }, "teacher_id": integer}
-    """
-
+def add_student_course_section(course_section_id, user_id):
     course_section = models.CourseSections.query.get(course_section_id)
-    course_section.students.append(Users.query.get(user_id))
+    student = models.Users.query.filter_by(id=user_id, type="student").first()
+
+    course_section_students = CourseSectionStudents(course_section_id=course_section_id, user_id=user_id)
+    course_section_students.course_section = course_section
+    student.course_sections.append(course_section_students)
+
     db.session.commit()
     return jsonify(course_section=models.CourseSections.query.get(course_section_id).serialize())
 
 
 @course_sections.route('/course_section_details/<course_section_id>', methods=['GET'])
 def course_section_details(course_section_id):
-    # Docs
-    """
-           Add Student Course Section
-           ---
-           tags:
-             - /course_sections
-           parameters:
-              - name: course_section_id
-                in: path
-                description: course section id.
-                required: true
-                type: integer
-           responses:
-             200:
-               description:  This is the view to get course section details.
-               schema:
-                 properties:
-                   course_section:
-                     type: array
-                     description: Course Sections list
-                     items:
-                       type: string
-                       default: {"id": integer, "code": string, "name": string, "course": { "code": string, "id": integer, "name": string }, "teacher_id": integer}
-    """
-
     return jsonify(course_section=models.CourseSections.query.get(course_section_id).serialize())
 
 
 @course_sections.route('/add_section_time_course_section/<course_section_id>', methods=['POST'])
 def add_section_time_course_section(course_section_id):
-    # Docs
-    """
-           Add Section Time To Course Section
-           ---
-           tags:
-             - /course_sections
-           parameters:
-              - name: course_section_id
-                in: path
-                description: course section id.
-                required: true
-                type: integer
-              - name: section_time_start_time
-                in: formData
-                description: section time start time.
-                required: true
-                type: string
-              - name: section_time_finish_time
-                in: formData
-                description: section time finish time.
-                required: true
-                type: string
-              - name: week_day
-                in: formData
-                description: week day (0 until 6).
-                required: true
-                type: integer
-           responses:
-             200:
-               description:  This is the service to add a new section time in the course section.
-               schema:
-                 properties:
-                   course_section:
-                     type: array
-                     description: Course Sections list
-                     items:
-                       type: string
-                       default: {"id": integer, "code": string, "name": string, "course": { "code": string, "id": integer, "name": string }, "teacher_id": integer}
-    """
-
     course_section = models.CourseSections.query.get(course_section_id)
 
     section_time_start_time = datetime.datetime.strptime(request.form.get('section_time_start_time'), '%H:%M:%S').time()
@@ -221,30 +74,5 @@ def add_section_time_course_section(course_section_id):
 
 @course_sections.route('/students_course_section/<course_section_id>', methods=['GET'])
 def students_course_section(course_section_id):
-    # Docs
-    """
-           Students Course Section
-           ---
-           tags:
-             - /course_sections
-           parameters:
-              - name: course_section_id
-                in: path
-                description: course section id.
-                required: true
-                type: integer
-           responses:
-             200:
-               description:  This is the service to get studento from a course section.
-               schema:
-                 properties:
-                   students_course_section:
-                     type: array
-                     description: Students Course Sections list
-                     items:
-                       type: string
-                       default: {"email": string, "id": integer}
-    """
-
     course_section = models.CourseSections.query.get(course_section_id)
     return jsonify(students_course_section=[dict(id=student.id, email=student.email) for student in course_section.students])

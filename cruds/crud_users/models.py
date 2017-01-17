@@ -11,7 +11,7 @@ class Users(db.Model):
     gender = db.Column(db.String(1))
     address = db.Column(db.String(250))
     type = db.Column(db.String(50))
-    course_sections = db.relationship('CourseSections', backref='teacher', lazy='dynamic')
+    course_sections = db.relationship('CourseSectionStudents')
 
     def serialize(self):
         return {
