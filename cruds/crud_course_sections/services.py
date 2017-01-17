@@ -163,7 +163,7 @@ def add_section_time_course_section(course_section_id):
     return jsonify(result='invalid period')
 
 
-@course_sections.route('/students_course_section/<course_section_id>', methods=['GET'])
+@course_sections.route('/course_sections_students/<course_section_id>', methods=['GET'])
 def students_course_section(course_section_id):
     # Docs
     """
@@ -173,7 +173,7 @@ def students_course_section(course_section_id):
              - /course_sections
            responses:
              200:
-               description:  This is the service to get studento from a course section.
+               description:  This is the service to get students from a course section.
                schema:
                  properties:
                    students_course_section:
