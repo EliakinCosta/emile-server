@@ -184,5 +184,7 @@ def students_course_section(course_section_id):
                        default: {"email": string, "id": integer}
     """
 
-    course_section = models.CourseSections.query.get(course_section_id)
-    return jsonify(students_course_section=[dict(id=student.id, email=student.email) for student in course_section.students])
+    course_section_students = models.CourseSectionStudents.query.filter_by(course_section_id=course_section_id)
+    students = [Users.query.get(course_section_student.user_id) for course_section_student in course_section_students]
+    return jsonify(students_course_section=[dict(id=student.id, email=student.email) for student in students])
+
