@@ -53,7 +53,7 @@ def upgrade():
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['course_section_id'], ['course_sections.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('id', 'course_section_id', 'user_id')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('section_times',
     sa.Column('id', sa.Integer(), nullable=False),
