@@ -149,8 +149,8 @@ def delete_user(user_id):
     return jsonify(result='invalid user id')
 
 
-@users.route('/course_sections_teacher/<teacher_id>', methods=['GET'])
-def course_sections_teacher(teacher_id):
+@users.route('/teachers_course_sections/<teacher_id>', methods=['GET'])
+def teachers_course_sections(teacher_id):
     #Docs
     """
            Course Sections Teacher
@@ -173,7 +173,7 @@ def course_sections_teacher(teacher_id):
 
     teacher = models.Users.query.filter_by(id=teacher_id, type="teacher").first()
     if teacher:
-        return jsonify(course_sections_teacher=[course_sections.serialize() for course_sections in teacher.course_sections.all()])
+        return jsonify(course_sections_teacher=[course_sections.serialize() for course_sections in teacher.course_sections])
     return jsonify(result='invalid teacher id')
 
 
