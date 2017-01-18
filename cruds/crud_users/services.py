@@ -1,7 +1,7 @@
 from flask import jsonify, Blueprint, request
 from . import models
 from backend import db
-from cruds.crud_course_section.models import CourseSections
+from cruds.crud_course_sections.models import CourseSections
 
 
 users = Blueprint("user", __name__)
