@@ -92,11 +92,10 @@ def student_attendance_register(section_time_id):
 
             db.session.commit()
             return jsonify(student_attendance=[student_attendance.serialize() for student_attendance in
-                                               section_time.student_attendance])
+                                               section_time.student_attendance]), 200
         except:
-            return jsonify(result="Invalid request")
-    return jsonify(result="Section time already registered")
-
+            return jsonify(result="Invalid request"), 404
+    return jsonify(result="Section time already registered"), 400
 
 @section_times.route('/update_section_time/<section_time_id>', methods=['POST'])
 def update_section_time(section_time_id):
