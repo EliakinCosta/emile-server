@@ -11,7 +11,7 @@ class Users(db.Model):
     gender = db.Column(db.String(1))
     address = db.Column(db.String(250))
     type = db.Column(db.String(50))
-    course_sections = db.relationship('CourseSectionStudents')
+    course_sections = db.relationship('CourseSectionStudents', cascade="save-update, merge, delete")
 
     def serialize(self):
         return {
